@@ -1,28 +1,26 @@
+let globalObjects = require('../POM/AP_Global')
 let loginpage = function () {
 
     let until = protractor.ExpectedConditions;
-    let username = element(by.id('username'));
-    let password = element(by.id('password'));
-    let uContinuebtn = element(by.id('login-submit'));
-    let redirecturl = 'https://start.atlassian.com';
+    let email = element(by.id('email'));
+    let password = element(by.id('passwd'));
+    let submitLogin = element(by.id('SubmitLogin'));
+    let redirecturl = "http://automationpractice.com/index.php"
 
-    this.get = function (url) {
-        browser.get(url);
+    this.Enter_Email = async ()=> {
+        browser.wait(until.visibilityOf(email), 20000, 'Email Field Not Visible');
+        await username.sendKeys(globalObjects.email());
     };
-    this.Enter_Username = function (user) {
-        browser.wait(until.visibilityOf(username), 20000, 'Username Field Not Visible');
-        username.sendKeys(user);
-    };
-    this.Enter_Password = function (pass) {
+    this.Enter_Password = async ()=> {
         browser.wait(until.visibilityOf(password), 10000, 'Password Field Not Visible');
-        password.sendKeys(pass);
+        password.sendKeys("admin1");
     };
-    this.usubmit = function () {
-        browser.wait(until.visibilityOf(uContinuebtn), 10000, 'Continue btn Not Visible');
-        uContinuebtn.click();
+    this.submitLoginBtn = async ()=> {
+        browser.wait(until.visibilityOf(submitLogin), 10000, 'Continue btn Not Visible');
+        await submitLogin.click();
     };
     this.rurl = function () {
-        browser.wait(until.urlContains(redirecturl), 30000, 'URL');
+        browser.wait(until.urlContains(redirecturl), 30000, 'Redirect URL not same');
     };
 
 };

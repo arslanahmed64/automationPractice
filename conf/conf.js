@@ -13,31 +13,10 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-      'args': ['--start-maximized', '--user-data-dir=/Users/arslanahmed/Desktop/Chromepath'] 
+      'args': ['--start-maximized'] 
       
     },
   },
-    // 'browserName': 'firefox',
-    // 'moz:firefoxOptions': {
-    //   'args': ['--start-maximized']
-
-    // }
-    // multiCapabilities: [
-    //   {
-    //       shardTestFiles: false,
-    //       maxInstances: 1,
-    //       browserName: 'chrome',
-    //       maxSessions: 1,
-    //       'args': ['--start-maximized']
-    //   },
-    //   {
-    //       shardTestFiles: false,
-    //       maxInstances: 1,
-    //       browserName: 'firefox',
-    //       maxSessions: 1,
-    //       'args': ['--start-maximized']
-    //   }
-    // ],
   
   onPrepare: function () {
     browser.driver.manage().window().maximize();
@@ -103,14 +82,14 @@ exports.config = {
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
-  specs: ['../tests/Login.spec.js','../tests/BP_Metric.spec.js', '../tests/BP_Methods.spec.js', '../tests/BP_Grid.spec.js'],
+  specs: ['../tests/Registration.spec.js'],
 
-  suites: {
-    metric_test_suite: ['../tests/Login.spec.js','../tests/BP_Metric.spec.js'],
-    methods_test_suite: ['../tests/Login.spec.js','../tests/BP_Methods.spec.js'],
-    grid_test_suite: ['../tests/Login.spec.js','../tests/BP_Grid.spec.js'],
-    login: '../tests/Login.spec.js'
-  },
+  // suites: {
+  //   metric_test_suite: ['../tests/Login.spec.js','../tests/BP_Metric.spec.js'],
+  //   methods_test_suite: ['../tests/Login.spec.js','../tests/BP_Methods.spec.js'],
+  //   grid_test_suite: ['../tests/Login.spec.js','../tests/BP_Grid.spec.js'],
+  //   login: '../tests/Login.spec.js'
+  // },
 
   // Options to be passed to Jasmine.
   jasmineNodeOpts: {

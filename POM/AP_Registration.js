@@ -1,161 +1,79 @@
-let global = require('../POM/BP_Global.js')
-let gridPage = function () {
+
+let globalObjects = require('../POM/AP_Global')
+let registrationPage = function () {
 
     let until = protractor.ExpectedConditions;
-    let filterType = element(by.className('search-type'));
-    let jqlInput = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[1]/div/app-jql-filter/div/input'));
-    let savedFiltersDropdown = element(by.className('saved-filters'));
-    let basicFilters = element(by.className('input-group'));
-    let issueTable = element(by.className('tableFixHead'));
-    let basicSearchBtn = element(by.className('basic-search-btn'));
-    let jqlEditorBtn = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[1]/div/app-jql-filter/div/button[2]'));
-    let jqlEditorIframe = element(by.id('connect-app-jql-editor-frame-id'));
-    let jqlEditorInput = element(by.id('advanced-search'));
-    let jqlEditSearch = element(by.className('search-button'));
-    let jqlEditTable = element(by.id('issuetable'));
-    let jqlErrorMessage = element(by.className('aui-message error'));
-    let useJQLToPrioritizeBtn = element(by.id('connect-app-jql-editor-submit-id'));
-    let JQLEditorCancelBtn = element(by.id('connect-app-jql-editor-cancel-id'));
-    let searchSavedFilter = element(by.className('saved-filters'));
-    let savedFilterList = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[1]/div/app-saved-filter/div/ng-multiselect-dropdown/div/div[2]/ul[2]/li[1]'));
-    let score = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[3]/div/ag-grid-angular/div/div[1]/div[2]/div[3]/div[2]/div/div/div[1]/div[4]'))
+    let emailAddress = element(by.id("email_create"));
+    let createBtn = element(by.id("SubmitCreate"));
+    let registrationForm = element(by.id("account-creation_form"));
+    let genderSelect = element.all(by.id('id_gender1'))
+    let firstName = element(by.id("customer_firstname"));
+    let lastName = element(by.id("customer_lastname"));
+    let regEmail = element(by.id("email"));
+    let regPassword = element(by.id("passwd"));
+    let address = element(by.id("address1"));
+    let city = element(by.id("city"));
+    let postCode = element(by.id("postcode"));
+    let mobilePhone = element(by.id("phone_mobile"));
+    let submitAccount = element(by.id("submitAccount"));
+    let welcomeMessage = element(by.xpath("/html/body/div/div[2]/div/div[3]/div/p"));
+    let verifySignOutBtn = element(by.xpath("/html/body/div/div[1]/header/div[2]/div/div/nav/div[2]/a"));
 
-
-    //Score Objects
-    let impactColumnSelect = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[3]/div/ag-grid-angular/div/div[1]/div[2]/div[3]/div[2]/div/div/div[1]/div[5]/app-label-cell/div/div/select'));
-    let confidenceColumnSelect = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[3]/div/ag-grid-angular/div/div[1]/div[2]/div[3]/div[2]/div/div/div[1]/div[6]/app-label-cell/div/div/select'))
-    let easeColumnSelect = element(by.xpath('/html/body/app-root/app-project/div/div/app-grid/div/div[3]/div/ag-grid-angular/div/div[1]/div[2]/div[3]/div[2]/div/div/div[1]/div[7]/app-label-cell/div/div/select'))
-
-    this.selectJQLFilter = function () {
-        browser.wait(until.visibilityOf(filterType), 10000, 'Select Filter not Visible');
-        filterType.element(by.cssContainingText('option', 'JQL')).click();
-        expect(filterType.getAttribute('value')).toEqual("jql");
-        expect(jqlInput.isDisplayed()).toBe(true);
+    this.enterEmail = async () => {
+        await emailAddress.sendKeys(globalObjects.email())
     }
 
-    this.selectSavedFilter = function () {
-        browser.wait(until.visibilityOf(filterType), 10000, 'Saved Filter not Visible');
-        filterType.element(by.cssContainingText('option', 'Saved')).click();
-        expect(filterType.getAttribute('value')).toEqual("filters");
-        browser.wait(until.visibilityOf(savedFiltersDropdown), 10000, 'Saved Filters Option not visible');
-        expect(savedFiltersDropdown.isDisplayed()).toBe(true);
+    this.clickCreate = async () => {
+        await browser.wait(until.elementToBeClickable(createBtn), 5000, "Create button not Clickable")
+        await createBtn.click();
+        await browser.wait(until.visibilityOf(registrationForm), 10000, "Registration form not visible")
     }
 
-    this.selectBasicFilter = function () {
-        browser.wait(until.visibilityOf(filterType), 10000, 'Saved Filter not Visible');
-        filterType.element(by.cssContainingText('option', 'Basic')).click();
-        expect(filterType.getAttribute('value')).toEqual("basic");
-        browser.wait(until.visibilityOf(basicFilters), 10000, 'Basic Filters Option not visible');
-        expect(basicFilters.isDisplayed()).toBe(true);
+    this.selectGender = async () => {
+        await genderSelect.first().click();
     }
 
-    this.searchBasic = function () {
-        expect(issueTable.isPresent()).toBe(false);
-        browser.wait(until.visibilityOf(basicSearchBtn), 10000, 'Basic Search Button');
-        basicSearchBtn.click();
+    this.fullName = async () => {
+        await firstName.sendKeys("John");
+        await lastName.sendKeys("Doe");
     }
 
-    this.verifySearch = function () {
-        browser.wait(until.visibilityOf(issueTable), 10000, 'Issue Table not visible');
-        expect(issueTable.isDisplayed()).toBe(true);
+    this.verifyEmail = async () => {
+        expect(regEmail.getAttribute('value')).toEqual(globalObjects.email());
     }
 
-    //Open JQL Filter Popup
-
-    this.jqlEditor = function () {
-        browser.wait(until.visibilityOf(jqlEditorBtn), 10000, 'JQL Editor button not visible');
-        browser.wait(until.elementToBeClickable(jqlEditorBtn), 10000, 'JQL Editor button not Clickable');
-        jqlEditorBtn.click();
-    }
-    this.switchJQLIframe = function () {
-        browser.switchTo().defaultContent();
-        browser.wait(until.visibilityOf(jqlEditorIframe), 10000, 'iframe Not Visible');
-        browser.driver.switchTo().frame(jqlEditorIframe.getWebElement());
+    this.enterPassword = async () => {
+        await regPassword.sendKeys("admin1");
     }
 
-    this.cancelJQLPopup = function () {
-        browser.switchTo().defaultContent();
-        browser.wait(until.visibilityOf(JQLEditorCancelBtn), 10000, 'JQL Editor button not visible');
-        JQLEditorCancelBtn.click();
+    this.selectOptions = async () => {
+        await element(by.cssContainingText('option', '5')).click();
+        await element(by.cssContainingText('option', 'August')).click();
+        await element(by.cssContainingText('option', '1990')).click();
+        await element(by.cssContainingText('option', 'California')).click();
     }
 
-    //Valid JQL Search
+    this.fillForm = async () => {
 
-    this.jqlEditInput = function () {
-        browser.wait(until.visibilityOf(jqlEditorInput), 10000, 'JQL Editor Input not visible');
-        jqlEditorInput.clear();
-        jqlEditorInput.sendKeys('type = bug AND summary ~ SSP-13');
+        await address.sendKeys("Street 1, Home 2, G9");
+        await browser.actions().mouseMove(city).perform();
+        await city.sendKeys("Islamabad");
+        await browser.actions().mouseMove(postCode).perform();
+        await postCode.sendKeys("51310");
+        await browser.actions().mouseMove(mobilePhone).perform();
+        await mobilePhone.sendKeys("923437676768");
     }
 
-    this.searchJqlEdit = function () {
-        browser.wait(until.visibilityOf(jqlEditSearch), 10000, 'JQL Editor Search not visible');
-        jqlEditSearch.click();
+    this.submitAccount = async () => {
+        await submitAccount.click();
+        browser.wait(until.visibilityOf(welcomeMessage), 10000, "Welcome message not visible")
     }
 
-    this.verifyAdvancedSearch = function () {
-        browser.wait(until.visibilityOf(jqlEditTable), 10000, 'JQL Table not visible');
-        expect(jqlEditTable.getText()).toContain('SSP-13');
-    }
-
-    //Invalid JQL Search
-    this.invalidJqlEditInput = function () {
-        browser.wait(until.visibilityOf(jqlEditorInput), 10000, 'JQL Editor Input not visible');
-        jqlEditorInput.clear();
-        jqlEditorInput.sendKeys(' != Done');
-    }
-
-    this.verifyJQLErrorMessage = function () {
-        browser.wait(until.visibilityOf(jqlErrorMessage), 10000, 'Error message not visible');
-        expect(jqlErrorMessage.getText()).toContain('Error');
-    }
-
-    //USE JQL And Verify search working
-    this.clickUseJQLBtn = function () {
-        browser.switchTo().defaultContent();
-        browser.wait(until.visibilityOf(useJQLToPrioritizeBtn), 10000, 'Use JQL Btn not visible');
-        useJQLToPrioritizeBtn.click();
-    }
-
-    this.verifyJQLFilteredResults = function () {
-        browser.wait(until.textToBePresentInElement(issueTable, 'SSP-13'), 5000);
-        expect(issueTable.getText()).toContain('SSP-13');
-    }
-
-
-    //Saved Filters
-    this.searchWithSavedFilter = function () {
-        searchSavedFilter.click();
-    }
-
-    this.selectBugs = function () {
-        savedFilterList.click();
-    }
-
-    this.verifySavedFilterResults = function () {
-        browser.wait(until.textToBePresentInElement(issueTable, 'SSP-17'), 5000);
-        expect(issueTable.getText()).toContain('SSP-17');
-    }
-
-    //Score Verification
-    this.selectImpact = function () {
-        browser.wait(until.visibilityOf(impactColumnSelect), 10000, 'Impact Dropdown not Visible');
-        impactColumnSelect.element(by.cssContainingText('option', 'High')).click();
-    }
-
-    this.selectConfidence = function () {
-        browser.wait(until.visibilityOf(confidenceColumnSelect), 10000, 'Impact Dropdown not Visible');
-        confidenceColumnSelect.element(by.cssContainingText('option', 'Very Low')).click();
-    }
-
-    this.selectEase = function () {
-        browser.wait(until.visibilityOf(easeColumnSelect), 10000, 'Impact Dropdown not Visible');
-        easeColumnSelect.element(by.cssContainingText('option', 'Medium')).click();
-    }
-
-    this.getScoreVerify = function() {
-        expect(score.getText()).toContain('128');
+    this.signOutBtn = async () => {
+        expect(await verifySignOutBtn.getText()).toContain("Sign Out");
+        await verifySignOutBtn.click();
     }
 
 }
 //comment
-module.exports = new gridPage();
+module.exports = new registrationPage();
