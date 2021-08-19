@@ -1,13 +1,13 @@
-let loginpage = require('../POM/JiraLogin_Objects');
+let loginpage = require('../POM/AP_Login');
+let global = require('../POM/AP_Global');
 
-describe('Login to Jira', function () {
-    it('Go to Login URL', function () {
+describe('Login to Automation Practice', function () {
+    it('Get Automation Practice & Login', function () {
         browser.waitForAngularEnabled(false);
-        loginpage.get('https://id.atlassian.com/login');
-        loginpage.Enter_Username('arslandev@yopmail.com');
-        loginpage.usubmit();
-        loginpage.Enter_Password('admin123');
-        loginpage.usubmit();
+        global.getAP();
+        loginpage.Enter_Email();
+        loginpage.Enter_Password();
+        loginpage.submitLoginBtn();
         loginpage.rurl();
     });
 });
