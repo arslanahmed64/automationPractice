@@ -1,1 +1,1 @@
-# automationPractive
+# automationPractice
