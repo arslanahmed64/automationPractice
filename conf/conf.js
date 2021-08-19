@@ -82,14 +82,7 @@ exports.config = {
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
-  specs: ['../tests/Registration.spec.js'],
-
-  // suites: {
-  //   metric_test_suite: ['../tests/Login.spec.js','../tests/BP_Metric.spec.js'],
-  //   methods_test_suite: ['../tests/Login.spec.js','../tests/BP_Methods.spec.js'],
-  //   grid_test_suite: ['../tests/Login.spec.js','../tests/BP_Grid.spec.js'],
-  //   login: '../tests/Login.spec.js'
-  // },
+  specs: ['../tests/Registration.spec.js', '../tests/Login.spec.js'],
 
   // Options to be passed to Jasmine.
   jasmineNodeOpts: {
